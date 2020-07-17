@@ -1,5 +1,5 @@
 /*
-   Project: DisplayInfo
+   Project: SPIDisplayKit
 
    Copyright (C) 2010 Limor Fried, Adafruit Industries
    Copyright (C) 2011 Le Dang Dung  <LeeDangDung@gmail.com> (tested on LPC1769)
@@ -167,6 +167,17 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
     }
   LCDdisplay();
 }
+
+- (void) setPixel:(SDKPoint)p withColor:(uint8_t) color
+{
+  LCDsetPixel(p.x, p.y, color);
+}
+
+- (uint8_t) getPixel:(SDKPoint)p
+{
+  return LCDgetPixel(p.x, p.y);
+}
+
 
 - (void)drawCString:(char*)c atX:(uint8_t)x atY:(uint8_t)y
 {

@@ -1,5 +1,5 @@
 /*
-   Project: DisplayInfo
+   Project: SPIDisplayKit
 
    Copyright (C) 2020 Free Software Foundation
 
@@ -27,6 +27,16 @@
 
 #import <Foundation/Foundation.h>
 
+/*
+ Similar to an NSPoint, SDKPoint represents an X-Y coordinate on the Matrix display.
+ However, just 8bit unsigned are enough.
+*/
+typedef struct _SDKPoint
+{
+  uint8_t x;
+  uint8_t y;
+} SDKPoint;
+
 @interface PCD8544Display : NSObject
 {
 
@@ -38,6 +48,10 @@
 - (void) display;
 - (void) clear;
 - (void) showLogo;
+
+
+- (void) setPixel:(SDKPoint)p withColor:(uint8_t) color;
+- (uint8_t) getPixel:(SDKPoint)p;
 
 - (void)drawCString:(char*)c atX:(uint8_t)x atY:(uint8_t)y;
 
@@ -108,12 +122,18 @@ Lesser General Public License for more details.
 #define LSBFIRST  0
 #define MSBFIRST  1
 
+// reimplemented
+
+// wrapped
+ void LCDdisplay();
+ void LCDdrawstring(uint8_t x, uint8_t line, char *c);
+ void LCDsetPixel(uint8_t x, uint8_t y, uint8_t color);
+ uint8_t LCDgetPixel(uint8_t x, uint8_t y);
+
+// left
  void LCDcommand(uint8_t c);
  void LCDdata(uint8_t c);
  void LCDsetContrast(uint8_t val);
- void LCDdisplay();
- void LCDsetPixel(uint8_t x, uint8_t y, uint8_t color);
- uint8_t LCDgetPixel(uint8_t x, uint8_t y);
  void LCDfillcircle(uint8_t x0, uint8_t y0, uint8_t r,uint8_t color);
  void LCDdrawcircle(uint8_t x0, uint8_t y0, uint8_t r,uint8_t color);
  void LCDdrawrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color);
@@ -123,7 +143,6 @@ Lesser General Public License for more details.
  void LCDsetTextColor(uint8_t c);
  void LCDwrite(uint8_t c);
  void LCDdrawchar(uint8_t x, uint8_t line, char c);
- void LCDdrawstring(uint8_t x, uint8_t line, char *c);
  void LCDdrawstring_P(uint8_t x, uint8_t line, const char *c);
  void LCDdrawbitmap(uint8_t x, uint8_t y,  const uint8_t *bitmap, uint8_t w, uint8_t h,  uint8_t color);
  void LCDspiwrite(uint8_t c);
