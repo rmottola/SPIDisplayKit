@@ -37,6 +37,19 @@ typedef struct _SDKPoint
   uint8_t y;
 } SDKPoint;
 
+/** Returns an SDKPoint having x-coordinate X and y-coordinate Y. */
+SDKPoint
+SDKMakePoint(uint8_t x, uint8_t y)
+{
+  SDKPoint point;
+
+  point.x = x;
+  point.y = y;
+  return point;
+}
+
+static const SDKPoint SDKZeroPoint = {0, 0};
+
 @interface PCD8544Display : NSObject
 {
 
@@ -53,7 +66,7 @@ typedef struct _SDKPoint
 - (void) setPixel:(SDKPoint)p withColor:(uint8_t) color;
 - (uint8_t) getPixel:(SDKPoint)p;
 
-- (void)drawCString:(char*)c atX:(uint8_t)x atY:(uint8_t)y;
+- (void)drawCString:(char*)c atPoint:(SDKPoint)p;
 
 @end
 

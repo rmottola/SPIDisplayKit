@@ -179,9 +179,9 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 }
 
 
-- (void)drawCString:(char*)c atX:(uint8_t)x atY:(uint8_t)y
+- (void)drawCString:(char*)c atPoint:(SDKPoint)p
 {
-  LCDdrawstring(x, y, c);
+  LCDdrawstring(p.x, p.y, c);
 }
 
 @end
