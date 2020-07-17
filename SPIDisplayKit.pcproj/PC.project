@@ -1,0 +1,80 @@
+{
+    "BUILDER_TARGETS" = (
+	all,
+	install,
+	uninstall,
+	clean,
+	distclean,
+	dist
+    );
+    "CLASS_FILES" = (
+	"PCD8544Display.m"
+    );
+    COMPILEROPTIONS = "";
+    CPPOPTIONS = "";
+    "CREATION_DATE" = "";
+    "DOCU_FILES" = (
+    );
+    FRAMEWORKS = (
+    );
+    "HEADERS_INSTALL_DIR" = "";
+    "HEADER_FILES" = (
+	"SPIDisplayKit.h",
+	"PCD8544Display.h",
+	"font.h",
+	"pilogo.h"
+    );
+    IMAGES = (
+    );
+    INSTALLDIR = "$(HOME)/GNUstep/Library/Frameworks";
+    INTERFACES = (
+    );
+    LANGUAGE = English;
+    LIBRARIES = (
+	"gnustep-base",
+	wiringPi
+    );
+    LINKEROPTIONS = "";
+    MAKEFILEDIR = "$(GNUSTEP_MAKEFILES)";
+    "OBJC_COMPILEROPTIONS" = "";
+    "OTHER_RESOURCES" = (
+    );
+    "OTHER_SOURCES" = (
+    );
+    "PROJECT_AUTHORS" = (
+	"Riccardo Mottola"
+    );
+    "PROJECT_COPYRIGHT" = "Copyright (C) 2020";
+    "PROJECT_COPYRIGHT_DESC" = "Released under LGPL 2.1";
+    "PROJECT_CREATOR" = "";
+    "PROJECT_DESCRIPTION" = "SPI Display Kit";
+    "PROJECT_GROUP" = "No group avaliable!";
+    "PROJECT_MAINTAINER" = "";
+    "PROJECT_NAME" = SPIDisplayKit;
+    "PROJECT_RELEASE" = "0.1";
+    "PROJECT_SUMMARY" = "No summary avaliable!";
+    "PROJECT_TYPE" = Framework;
+    "PROJECT_URL" = "https://github.com/rmottola/SPIDisplayKit";
+    "PUBLIC_HEADERS" = (
+	"SPIDisplayKit.h",
+	"PCD8544Display.h",
+	"font.h",
+	"pilogo.h"
+    );
+    "SEARCH_HEADER_DIRS" = (
+    );
+    "SEARCH_LIB_DIRS" = (
+	"/usr/lib"
+    );
+    SUBPROJECTS = (
+    );
+    "SUPPORTING_FILES" = (
+	"GNUmakefile.preamble",
+	GNUmakefile,
+	"GNUmakefile.postamble"
+    );
+    "USER_LANGUAGES" = (
+	BritainEnglish,
+	English
+    );
+}
