@@ -140,6 +140,21 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
   return self;
 }
 
+- (void) command:(uint8_t) c;
+{
+  LCDcommand(c);
+}
+
+- (void) data:(uint8_t) c
+{
+  LCDdata(c);
+}
+
+- (void) SPIWrite:(uint8_t)c
+{
+  LCDspiwrite(c);
+}
+
 - (void)display
 {
   LCDdisplay();

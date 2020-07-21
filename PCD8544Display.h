@@ -74,10 +74,13 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 - (id) init;
 - (id) initWithPinsClock:(uint8_t)SCLK dataIn:(uint8_t)DIN dataCommand:(uint8_t)DC chipEnable:(uint8_t)CE reset:(uint8_t)RST contrast:(uint8_t)contrast;
 
+- (void) command:(uint8_t) c;
+- (void) data:(uint8_t) c;
+- (void) SPIWrite:(uint8_t)c;
+
 - (void) display;
 - (void) clear;
 - (void) showLogo;
-
 
 - (void) setPixel:(SDKPoint)p withColor:(uint8_t) color;
 - (uint8_t) getPixel:(SDKPoint)p;
@@ -141,6 +144,9 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 // reimplemented
 
 // wrapped
+ void LCDcommand(uint8_t c);
+ void LCDdata(uint8_t c);
+ void LCDspiwrite(uint8_t c);
  void LCDdisplay();
  void LCDdrawchar(uint8_t x, uint8_t line, char c);
  void LCDdrawstring(uint8_t x, uint8_t line, char *c);
@@ -155,14 +161,12 @@ static const SDKPoint SDKZeroPoint = {0, 0};
  void LCDsetCursor(uint8_t x, uint8_t y);
 
 // left
- void LCDcommand(uint8_t c);
- void LCDdata(uint8_t c);
+
  void LCDsetContrast(uint8_t val);
 
  void LCDsetTextColor(uint8_t c);
  void LCDwrite(uint8_t c);
 
  void LCDdrawbitmap(uint8_t x, uint8_t y,  const uint8_t *bitmap, uint8_t w, uint8_t h,  uint8_t color);
- void LCDspiwrite(uint8_t c);
  void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
  void _delay_ms(uint32_t t);
