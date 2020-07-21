@@ -81,6 +81,7 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 
 - (void) display;
 - (void) clear;
+- (void) setContrast:(uint8_t)val;
 - (void) showLogo;
 
 - (void) setPixel:(SDKPoint)p withColor:(uint8_t) color;
@@ -151,6 +152,7 @@ static const SDKPoint SDKZeroPoint = {0, 0};
  void LCDspiwrite(uint8_t c);
  void LCDwrite(uint8_t c);
  void LCDdisplay();
+ void LCDsetContrast(uint8_t val);
  void LCDdrawchar(uint8_t x, uint8_t line, char c);
  void LCDdrawstring(uint8_t x, uint8_t line, char *c);
 
@@ -167,7 +169,6 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 
 // left
 
- void LCDsetContrast(uint8_t val);
 
  void LCDsetTextColor(uint8_t c);
 

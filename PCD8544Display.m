@@ -165,6 +165,11 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
   LCDdisplay();
 }
 
+- (void) setContrast:(uint8_t)val
+{
+  LCDsetContrast(val);
+}
+
 // clear everything
 - (void)clear
 {
