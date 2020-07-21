@@ -77,6 +77,7 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 - (void) command:(uint8_t) c;
 - (void) data:(uint8_t) c;
 - (void) SPIWrite:(uint8_t)c;
+- (void) write:(uint8_t)c;
 
 - (void) display;
 - (void) clear;
@@ -148,6 +149,7 @@ static const SDKPoint SDKZeroPoint = {0, 0};
  void LCDcommand(uint8_t c);
  void LCDdata(uint8_t c);
  void LCDspiwrite(uint8_t c);
+ void LCDwrite(uint8_t c);
  void LCDdisplay();
  void LCDdrawchar(uint8_t x, uint8_t line, char c);
  void LCDdrawstring(uint8_t x, uint8_t line, char *c);
@@ -168,7 +170,6 @@ static const SDKPoint SDKZeroPoint = {0, 0};
  void LCDsetContrast(uint8_t val);
 
  void LCDsetTextColor(uint8_t c);
- void LCDwrite(uint8_t c);
 
 
  void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);

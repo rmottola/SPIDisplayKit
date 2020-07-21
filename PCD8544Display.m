@@ -155,6 +155,11 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
   LCDspiwrite(c);
 }
 
+- (void) write:(uint8_t)c
+{
+  LCDwrite(c);
+}
+
 - (void)display
 {
   LCDdisplay();
