@@ -7,6 +7,7 @@
    Copyright (C) 2020 Riccardo Mottola
 
    Author: Riccardo Mottola
+           Andre Wussow
 
    Created: 2020-06-18 09:06:15
 
@@ -27,10 +28,6 @@
 
 /*
 =================================================================================
- Name        : PCD8544.c
- Version     : 0.1
-
-
 
  Description :
      A simple PCD8544 LCD (Nokia3310/5110) driver. Target board is Raspberry Pi.
@@ -181,6 +178,11 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 - (void) setCursorAt:(SDKPoint)point
 {
   LCDsetCursor(point.x, point.y);
+}
+
+- (void) drawChar:(char)ch atPoint:(SDKPoint)p
+{
+  LCDdrawchar(p.x, p.y, ch);
 }
 
 - (void)drawCString:(char*)c atPoint:(SDKPoint)p

@@ -1,9 +1,13 @@
 /*
    Project: SPIDisplayKit
 
-   Copyright (C) 2020 Free Software Foundation
+   Copyright (C) 2010 Limor Fried, Adafruit Industries
+   Copyright (C) 2011 Le Dang Dung  <LeeDangDung@gmail.com> (tested on LPC1769)
+   Copyright (C) 2012 Andre Wussow <desk@binerry.de>
+   Copyright (C) 2020 Riccardo Mottola
 
    Author: Riccardo Mottola
+           Andre Wussow
 
    Created: 2020-06-18 09:06:15
 
@@ -79,6 +83,7 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 - (uint8_t) getPixel:(SDKPoint)p;
 
 - (void) setCursorAt:(SDKPoint)point;
+- (void) drawChar:(char)ch atPoint:(SDKPoint)p;
 - (void) drawCString:(char*)c atPoint:(SDKPoint)p;
 
 - (void) fillCircleWithCenter:(SDKPoint)center radius:(uint8_t)r color:(uint8_t)c;
@@ -95,30 +100,6 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 #endif // _PCD8544DISPLAY_H_
 
 
-
-/*
-=================================================================================
- Name        : PCD8544.h
- Version     : 0.1
-
- Copyright (C) 2010 Limor Fried, Adafruit Industries
- CORTEX-M3 version by Le Dang Dung, 2011 LeeDangDung@gmail.com (tested on LPC1769)
- Raspberry Pi version by Andre Wussow, 2012, desk@binerry.de
-
- Description : PCD8544 LCD library!
-
-================================================================================
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
-
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
-================================================================================
- */
 #include <stdint.h>
 
 #define BLACK 1
@@ -161,7 +142,9 @@ Lesser General Public License for more details.
 
 // wrapped
  void LCDdisplay();
+ void LCDdrawchar(uint8_t x, uint8_t line, char c);
  void LCDdrawstring(uint8_t x, uint8_t line, char *c);
+
  void LCDsetPixel(uint8_t x, uint8_t y, uint8_t color);
  uint8_t LCDgetPixel(uint8_t x, uint8_t y);
  void LCDfillcircle(uint8_t x0, uint8_t y0, uint8_t r,uint8_t color);
@@ -178,8 +161,8 @@ Lesser General Public License for more details.
 
  void LCDsetTextColor(uint8_t c);
  void LCDwrite(uint8_t c);
- void LCDdrawchar(uint8_t x, uint8_t line, char c);
  void LCDdrawstring_P(uint8_t x, uint8_t line, const char *c);
+
  void LCDdrawbitmap(uint8_t x, uint8_t y,  const uint8_t *bitmap, uint8_t w, uint8_t h,  uint8_t color);
  void LCDspiwrite(uint8_t c);
  void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
