@@ -37,6 +37,18 @@ typedef struct _SDKPoint
   uint8_t y;
 } SDKPoint;
 
+typedef struct _SDKSize
+{
+  uint8_t width;
+  uint8_t height;
+} SDKSize;
+
+typedef struct _SDKRect
+{
+  SDKPoint origin;
+  SDKSize  size;
+} SDKRect;
+
 /** Returns an SDKPoint having x-coordinate X and y-coordinate Y. */
 SDKPoint
 SDKMakePoint(uint8_t x, uint8_t y)
@@ -66,7 +78,17 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 - (void) setPixel:(SDKPoint)p withColor:(uint8_t) color;
 - (uint8_t) getPixel:(SDKPoint)p;
 
-- (void)drawCString:(char*)c atPoint:(SDKPoint)p;
+- (void) setCursorAt:(SDKPoint)point;
+- (void) drawCString:(char*)c atPoint:(SDKPoint)p;
+
+- (void) fillCircleWithCenter:(SDKPoint)center radius:(uint8_t)r color:(uint8_t)c;
+- (void) strokeCircleWithCenter:(SDKPoint)center radius:(uint8_t)r color:(uint8_t)c;
+
+- (void) fillRect:(SDKRect)rect color:(uint8_t)c;
+- (void) strokeRect:(SDKRect)rect color:(uint8_t)c;
+
+- (void) strokeLineFromPoint:(SDKPoint)p1 toPoint:(SDKPoint)p2 color:(uint8_t)c;
+
 
 @end
 
@@ -142,17 +164,18 @@ Lesser General Public License for more details.
  void LCDdrawstring(uint8_t x, uint8_t line, char *c);
  void LCDsetPixel(uint8_t x, uint8_t y, uint8_t color);
  uint8_t LCDgetPixel(uint8_t x, uint8_t y);
-
-// left
- void LCDcommand(uint8_t c);
- void LCDdata(uint8_t c);
- void LCDsetContrast(uint8_t val);
  void LCDfillcircle(uint8_t x0, uint8_t y0, uint8_t r,uint8_t color);
  void LCDdrawcircle(uint8_t x0, uint8_t y0, uint8_t r,uint8_t color);
  void LCDdrawrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color);
  void LCDfillrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color);
  void LCDdrawline(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t color);
  void LCDsetCursor(uint8_t x, uint8_t y);
+
+// left
+ void LCDcommand(uint8_t c);
+ void LCDdata(uint8_t c);
+ void LCDsetContrast(uint8_t val);
+
  void LCDsetTextColor(uint8_t c);
  void LCDwrite(uint8_t c);
  void LCDdrawchar(uint8_t x, uint8_t line, char c);

@@ -178,10 +178,39 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
   return LCDgetPixel(p.x, p.y);
 }
 
+- (void) setCursorAt:(SDKPoint)point
+{
+  LCDsetCursor(point.x, point.y);
+}
 
 - (void)drawCString:(char*)c atPoint:(SDKPoint)p
 {
   LCDdrawstring(p.x, p.y, c);
+}
+
+- (void) fillCircleWithCenter:(SDKPoint)center radius:(uint8_t)r color:(uint8_t)c
+{
+  LCDfillcircle(center.x, center.y, r, c);
+}
+
+- (void) strokeCircleWithCenter:(SDKPoint)center radius:(uint8_t)r color:(uint8_t)c
+{
+  LCDdrawcircle(center.x, center.y, r, c);
+}
+
+- (void) fillRect:(SDKRect)rect color:(uint8_t)c
+{
+  LCDfillrect(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height, c);
+}
+
+- (void) strokeRect:(SDKRect)rect color:(uint8_t)c
+{
+  LCDfillrect(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height, c);
+}
+
+- (void) strokeLineFromPoint:(SDKPoint)p1 toPoint:(SDKPoint)p2 color:(uint8_t)c
+{
+  LCDdrawline(p1.x, p1.y, p2.x, p2.y, c);
 }
 
 @end
