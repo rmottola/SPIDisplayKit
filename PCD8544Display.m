@@ -230,6 +230,11 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
   LCDdrawline(p1.x, p1.y, p2.x, p2.y, c);
 }
 
+- (void) drawBitmap:(uint8_t*)bmp inRect:(SDKRect)rect color:(uint8_t)color
+{
+  LCDdrawbitmap(rect.origin.x, rect.origin.y, bmp, rect.size.height, rect.size.width, color);
+}
+
 @end
 
 

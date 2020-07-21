@@ -97,6 +97,7 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 
 - (void) strokeLineFromPoint:(SDKPoint)p1 toPoint:(SDKPoint)p2 color:(uint8_t)c;
 
+- (void) drawBitmap:(uint8_t*)bmp inRect:(SDKRect)rect color:(uint8_t)color;
 
 @end
 
@@ -159,6 +160,8 @@ static const SDKPoint SDKZeroPoint = {0, 0};
  void LCDfillrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color);
  void LCDdrawline(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t color);
  void LCDsetCursor(uint8_t x, uint8_t y);
+ void LCDdrawbitmap(uint8_t x, uint8_t y,  const uint8_t *bitmap, uint8_t w, uint8_t h,  uint8_t color);
+
 
 // left
 
@@ -167,6 +170,6 @@ static const SDKPoint SDKZeroPoint = {0, 0};
  void LCDsetTextColor(uint8_t c);
  void LCDwrite(uint8_t c);
 
- void LCDdrawbitmap(uint8_t x, uint8_t y,  const uint8_t *bitmap, uint8_t w, uint8_t h,  uint8_t color);
+
  void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
  void _delay_ms(uint32_t t);
