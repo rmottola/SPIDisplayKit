@@ -277,18 +277,6 @@ void LCDdrawstring(uint8_t x, uint8_t y, char *c)
 	}
 }
 
-void LCDdrawstring_P(uint8_t x, uint8_t y, const char *str)
-{
-	cursor_x = x;
-	cursor_y = y;
-	while (1)
-	{
-		char c = (*str++);
-		if (! c)
-			return;
-		LCDwrite(c);
-	}
-}
 
 void LCDdrawchar(uint8_t x, uint8_t y, char c)
 {

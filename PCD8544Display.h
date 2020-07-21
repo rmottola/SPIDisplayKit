@@ -161,7 +161,6 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 
  void LCDsetTextColor(uint8_t c);
  void LCDwrite(uint8_t c);
- void LCDdrawstring_P(uint8_t x, uint8_t line, const char *c);
 
  void LCDdrawbitmap(uint8_t x, uint8_t y,  const uint8_t *bitmap, uint8_t w, uint8_t h,  uint8_t color);
  void LCDspiwrite(uint8_t c);
