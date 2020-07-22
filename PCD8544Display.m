@@ -167,7 +167,51 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 
 - (void)display
 {
-  LCDdisplay();
+  uint8_t col, maxcol, p;
+
+  for(p = 0; p < 6; p++)
+    {
+#ifdef enablePartialUpdate
+      // check if this page is part of update
+      if ( yUpdateMin >= ((p+1)*8) )
+	{
+	  continue;   // nope, skip it!
+	}
+      if (yUpdateMax < p*8)
+	{
+	  break;
+	}
+#endif
+
+      LCDcommand(PCD8544_SETYADDR | p);
+
+
+#ifdef enablePartialUpdate
+      col = xUpdateMin;
+      maxcol = xUpdateMax;
+#else
+      // start at the beginning of the row
+      col = 0;
+      maxcol = LCDWIDTH-1;
+#endif
+
+      LCDcommand(PCD8544_SETXADDR | col);
+
+      for(; col <= maxcol; col++) {
+	//uart_putw_dec(col);
+	//uart_putchar(' ');
+	LCDdata(pcd8544_buffer[(LCDWIDTH*p)+col]);
+      }
+    }
+
+  LCDcommand(PCD8544_SETYADDR );  // no idea why this is necessary but it is to finish the last byte?
+#ifdef enablePartialUpdate
+  xUpdateMin = LCDWIDTH - 1;
+  xUpdateMax = 0;
+  yUpdateMin = LCDHEIGHT-1;
+  yUpdateMax = 0;
+#endif
+
 }
 
 - (void) setContrast:(uint8_t)val
@@ -192,7 +236,7 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
     {
       pcd8544_buffer[i] = pi_logo[i];
     }
-  LCDdisplay();
+  [self display];
 }
 
 - (void) setPixel:(SDKPoint)p withColor:(uint8_t) color
@@ -594,54 +638,6 @@ void LCDsetContrast(uint8_t val)
 	LCDcommand(PCD8544_FUNCTIONSET);
 }
 
-void LCDdisplay(void)
-{
-	uint8_t col, maxcol, p;
-
-	for(p = 0; p < 6; p++)
-	{
-#ifdef enablePartialUpdate
-		// check if this page is part of update
-		if ( yUpdateMin >= ((p+1)*8) )
-		{
-			continue;   // nope, skip it!
-		}
-		if (yUpdateMax < p*8)
-		{
-			break;
-		}
-#endif
-
-		LCDcommand(PCD8544_SETYADDR | p);
-
-
-#ifdef enablePartialUpdate
-		col = xUpdateMin;
-		maxcol = xUpdateMax;
-#else
-		// start at the beginning of the row
-		col = 0;
-		maxcol = LCDWIDTH-1;
-#endif
-
-		LCDcommand(PCD8544_SETXADDR | col);
-
-		for(; col <= maxcol; col++) {
-			//uart_putw_dec(col);
-			//uart_putchar(' ');
-			LCDdata(pcd8544_buffer[(LCDWIDTH*p)+col]);
-		}
-	}
-
-	LCDcommand(PCD8544_SETYADDR );  // no idea why this is necessary but it is to finish the last byte?
-#ifdef enablePartialUpdate
-	xUpdateMin = LCDWIDTH - 1;
-	xUpdateMax = 0;
-	yUpdateMin = LCDHEIGHT-1;
-	yUpdateMax = 0;
-#endif
-
-}
 
 // bitbang serial shift out on select GPIO pin. Data rate is defined by CPU clk speed and CLKCONST_2. 
 // Calibrate these value for your need on target platform.
