@@ -205,6 +205,11 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
   LCDsetCursor(point.x, point.y);
 }
 
+- (void) setTextColor:(uint8_t)color
+{
+  LCDsetTextColor(color);
+}
+
 - (void) drawChar:(char)ch atPoint:(SDKPoint)p
 {
   LCDdrawchar(p.x, p.y, ch);
