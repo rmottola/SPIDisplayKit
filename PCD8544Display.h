@@ -78,6 +78,7 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 - (void) data:(uint8_t) c;
 - (void) SPIWrite:(uint8_t)c;
 - (void) write:(uint8_t)c;
+- (void) shiftOut:(uint8_t)val dataPin:(uint8_t)dp withClock:(uint8_t)clockPin andOrder:(uint8_t)bitOrder;
 
 - (void) display;
 - (void) clear;
@@ -152,6 +153,7 @@ static const SDKPoint SDKZeroPoint = {0, 0};
  void LCDdata(uint8_t c);
  void LCDspiwrite(uint8_t c);
  void LCDwrite(uint8_t c);
+ void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
  void LCDdisplay();
 
  void LCDsetContrast(uint8_t val);
@@ -171,9 +173,4 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 
 
 // left
-
-
-
-
- void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
  void _delay_ms(uint32_t t);

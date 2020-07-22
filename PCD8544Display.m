@@ -160,6 +160,11 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
   LCDwrite(c);
 }
 
+- (void) shiftOut:(uint8_t)val dataPin:(uint8_t)dp withClock:(uint8_t)clockPin andOrder:(uint8_t)bitOrder
+{
+   shiftOut(dp, clockPin, bitOrder, val);
+}
+
 - (void)display
 {
   LCDdisplay();
