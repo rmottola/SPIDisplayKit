@@ -277,7 +277,7 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 
 - (void) setTextColor:(uint8_t)color
 {
-  LCDsetTextColor(color);
+  textcolor = color;
 }
 
 - (void) drawChar:(char)ch atPoint:(SDKPoint)p

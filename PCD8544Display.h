@@ -150,8 +150,6 @@ static const SDKPoint SDKZeroPoint = {0, 0};
  void LCDspiwrite(uint8_t c);
  void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
 
- void LCDsetTextColor(uint8_t c);
-
  void LCDfillcircle(uint8_t x0, uint8_t y0, uint8_t r,uint8_t color);
  void LCDdrawcircle(uint8_t x0, uint8_t y0, uint8_t r,uint8_t color);
  void LCDdrawrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color);
