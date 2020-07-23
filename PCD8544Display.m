@@ -123,7 +123,7 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 	digitalWrite(_cs, LOW);
 
       digitalWrite(_rst, LOW);
-      _delay_ms(500);
+      delayMillis(500);
       digitalWrite(_rst, HIGH);
 
       // get into the EXTENDED mode!
@@ -615,8 +615,8 @@ void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val)
 	}
 }
 
-// roughly calibrated spin delay
-void _delay_ms(uint32_t t)
+void delayMillis(uint32_t t)
 {
-  usleep(t * 1000);
+  // wiring pi takes in account small delays and uses loops, we should never be in that case though
+  delayMicroseconds(t * 1000);
 }

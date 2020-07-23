@@ -155,6 +155,5 @@ static const SDKPoint SDKZeroPoint = {0, 0};
  void LCDdrawbitmap(uint8_t x, uint8_t y,  const uint8_t *bitmap, uint8_t w, uint8_t h,  uint8_t color);
 
 
-// left
- void _delay_ms(uint32_t t);
+void delayMillis(uint32_t t);
 static void my_setpixel(uint8_t x, uint8_t y, uint8_t color);
