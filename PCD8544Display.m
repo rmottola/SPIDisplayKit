@@ -162,10 +162,6 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
   LCDspiwrite(c);
 }
 
-- (void) write:(uint8_t)c
-{
-  LCDwrite(c);
-}
 
 - (void) shiftOut:(uint8_t)val dataPin:(uint8_t)dp withClock:(uint8_t)clockPin andOrder:(uint8_t)bitOrder
 {
@@ -285,12 +281,66 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 
 - (void) drawChar:(char)ch atPoint:(SDKPoint)p
 {
-  LCDdrawchar(p.x, p.y, ch);
+  if (p.y >= LCDHEIGHT) return;
+  if ((p.x+5) >= LCDWIDTH) return;
+  uint8_t i,j;
+  for ( i =0; i<5; i++ )
+    {
+      uint8_t d = *(font+(ch*5)+i);
+      uint8_t j;
+      for (j = 0; j<8; j++)
+	{
+	  if (d & _BV(j))
+	    {
+	      my_setpixel(p.x+i, p.y+j, textcolor);
+	    }
+	  else
+	    {
+	      my_setpixel(p.x+i, p.y+j, !textcolor);
+	    }
+	}
+    }
+
+  for ( j = 0; j<8; j++)
+    {
+      my_setpixel(p.x+5, p.y+j, !textcolor);
+    }
+  updateBoundingBox(p.x, p.y, p.x+5, p.y+8);
+}
+
+- (void) writeChar:(uint8_t)c
+{
+  if (c == '\n')
+    {
+      cursor_y += textsize*8;
+      cursor_x = 0;
+    }
+  else if (c == '\r')
+    {
+      // skip em
+    }
+  else
+    {
+      [self drawChar:c atPoint:SDKMakePoint(cursor_x, cursor_y)];
+      cursor_x += textsize*6;
+      if (cursor_x >= (LCDWIDTH-5))
+	{
+	  cursor_x = 0;
+	  cursor_y+=8;
+	}
+      if (cursor_y >= LCDHEIGHT)
+	cursor_y = 0;
+    }
 }
 
 - (void)drawCString:(char*)c atPoint:(SDKPoint)p
 {
-  LCDdrawstring(p.x, p.y, c);
+  cursor_x = p.x;
+  cursor_y = p.y;
+  while (*c)
+    {
+      [self writeChar:*c++];
+    }
 }
 
 - (void) fillCircleWithCenter:(SDKPoint)center radius:(uint8_t)r color:(uint8_t)c
@@ -366,69 +416,9 @@ void LCDdrawbitmap(uint8_t x, uint8_t y,const uint8_t *bitmap, uint8_t w, uint8_
 	updateBoundingBox(x, y, x+w, y+h);
 }
 
-void LCDdrawstring(uint8_t x, uint8_t y, char *c)
-{
-	cursor_x = x;
-	cursor_y = y;
-	while (*c)
-	{
-		LCDwrite(*c++);
-	}
-}
-
-
-void LCDdrawchar(uint8_t x, uint8_t y, char c)
-{
-	if (y >= LCDHEIGHT) return;
-	if ((x+5) >= LCDWIDTH) return;
-	uint8_t i,j;
-	for ( i =0; i<5; i++ )
-	{
-		uint8_t d = *(font+(c*5)+i);
-		uint8_t j;
-		for (j = 0; j<8; j++)
-		{
-			if (d & _BV(j))
-			{
-				my_setpixel(x+i, y+j, textcolor);
-			}
-			else
-			{
-				my_setpixel(x+i, y+j, !textcolor);
-			}
-		}
-	}
-
-	for ( j = 0; j<8; j++)
-	{
-		my_setpixel(x+5, y+j, !textcolor);
-	}
-	updateBoundingBox(x, y, x+5, y + 8);
-}
-
 void LCDwrite(uint8_t c)
 {
-	if (c == '\n')
-	{
-		cursor_y += textsize*8;
-		cursor_x = 0;
-	}
-	else if (c == '\r')
-	{
-		// skip em
-	}
-	else
-	{
-		LCDdrawchar(cursor_x, cursor_y, c);
-		cursor_x += textsize*6;
-		if (cursor_x >= (LCDWIDTH-5))
-		{
-			cursor_x = 0;
-			cursor_y+=8;
-		}
-		if (cursor_y >= LCDHEIGHT)
-			cursor_y = 0;
-	}
+
 }
 
 void LCDsetCursor(uint8_t x, uint8_t y)
