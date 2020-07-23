@@ -85,9 +85,6 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 - (void) setContrast:(uint8_t)val;
 - (void) showLogo;
 
-- (void) setPixel:(SDKPoint)p withColor:(uint8_t) color;
-- (uint8_t) getPixel:(SDKPoint)p;
-
 - (void) setCursorAt:(SDKPoint)point;
 - (void) setTextColor:(uint8_t)color;
 - (void) drawChar:(char)ch atPoint:(SDKPoint)p;

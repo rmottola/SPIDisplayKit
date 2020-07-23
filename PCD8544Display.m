@@ -60,6 +60,12 @@
 #include "pilogo.h"
 #include "font.h"
 
+// An abs() :)
+#define abs(a) (((a) < 0) ? -(a) : (a))
+
+// bit set
+#define _BV(bit) (0x1 << (bit))
+
 // the memory buffer for the LCD
 uint8_t pcd8544_buffer[LCDWIDTH * LCDHEIGHT / 8] = {0,};
 
@@ -241,12 +247,23 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 
 - (void) setPixel:(SDKPoint)p withColor:(uint8_t) color
 {
-  LCDsetPixel(p.x, p.y, color);
+  if ((p.x >= LCDWIDTH) || (p.y >= LCDHEIGHT))
+    return;
+
+  // x is which column
+  if (color)
+    pcd8544_buffer[p.x+ (p.y/8)*LCDWIDTH] |= _BV(p.y%8);
+  else
+    pcd8544_buffer[p.x+ (p.y/8)*LCDWIDTH] &= ~_BV(p.y%8);
+  updateBoundingBox(p.x,p.y,p.x,p.y);
 }
 
 - (uint8_t) getPixel:(SDKPoint)p
 {
-  return LCDgetPixel(p.x, p.y);
+  if ((p.x >= LCDWIDTH) || (p.y >= LCDHEIGHT))
+    return 0;
+
+  return (pcd8544_buffer[p.x+ (p.y/8)*LCDWIDTH] >> (7-(p.y%8))) & 0x1;
 }
 
 - (void) setCursorAt:(SDKPoint)point
@@ -300,15 +317,6 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 }
 
 @end
-
-
-
-
-// An abs() :)
-#define abs(a) (((a) < 0) ? -(a) : (a))
-
-// bit set
-#define _BV(bit) (0x1 << (bit))
 
 
 
@@ -586,29 +594,6 @@ void LCDfillcircle(uint8_t x0, uint8_t y0, uint8_t r, uint8_t color)
 			my_setpixel(x0-y, i, color);
 		}
 	}
-}
-
-// the most basic function, set a single pixel
-void LCDsetPixel(uint8_t x, uint8_t y, uint8_t color)
-{
-	if ((x >= LCDWIDTH) || (y >= LCDHEIGHT))
-		return;
-
-	// x is which column
-	if (color)
-		pcd8544_buffer[x+ (y/8)*LCDWIDTH] |= _BV(y%8);
-	else
-		pcd8544_buffer[x+ (y/8)*LCDWIDTH] &= ~_BV(y%8);
-	updateBoundingBox(x,y,x,y);
-}
-
-// the most basic function, get a single pixel
-uint8_t LCDgetPixel(uint8_t x, uint8_t y)
-{
-	if ((x >= LCDWIDTH) || (y >= LCDHEIGHT))
-		return 0;
-
-	return (pcd8544_buffer[x+ (y/8)*LCDWIDTH] >> (7-(y%8))) & 0x1;
 }
 
 void LCDspiwrite(uint8_t c)
