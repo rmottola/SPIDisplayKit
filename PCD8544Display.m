@@ -53,6 +53,9 @@
 
  */
 
+
+#include <unistd.h>
+
 #import "PCD8544Display.h"
 
 #include <wiringPi.h>
@@ -272,7 +275,7 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 
 - (void) setCursorAt:(SDKPoint)point
 {
-  LCDsetCursor(point.x, point.y);
+  cursor = point;
 }
 
 - (void) setTextColor:(uint8_t)color
@@ -363,9 +366,57 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
   LCDfillrect(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height, c);
 }
 
+// bresenham's algorithm - thx wikpedia
 - (void) strokeLineFromPoint:(SDKPoint)p1 toPoint:(SDKPoint)p2 color:(uint8_t)c
 {
-  LCDdrawline(p1.x, p1.y, p2.x, p2.y, c);
+  uint8_t steep = abs(p2.y - p1.y) > abs(p2.x - p1.x);
+  if (steep)
+    {
+      swap(p1.x, p1.y);
+      swap(p2.x, p2.y);
+    }
+
+  if (p1.x > p2.x)
+    {
+      swap(p1.x, p2.x);
+      swap(p1.y, p2.y);
+    }
+
+  // much faster to put the test here, since we've already sorted the points
+  updateBoundingBox(p1.x, p1.y, p2.x, p2.y);
+
+  uint8_t dx, dy;
+  dx = p2.x - p1.x;
+  dy = abs(p2.y - p2.y);
+
+  int8_t err = dx / 2;
+  int8_t ystep;
+
+  if (p1.y < p2.y)
+    {
+      ystep = 1;
+    } else
+    {
+      ystep = -1;
+    }
+
+  for (; p1.x<=p2.x; p1.x++)
+    {
+      if (steep)
+	{
+	  my_setpixel(p1.y, p1.x, c);
+	}
+      else
+	{
+	  my_setpixel(p1.x, p1.y, c);
+	}
+      err -= dy;
+      if (err < 0)
+	{
+	  p1.x += ystep;
+	  err += dx;
+	}
+    }
 }
 
 - (void) drawBitmap:(uint8_t*)bmp inRect:(SDKRect)rect color:(uint8_t)color
@@ -416,69 +467,8 @@ void LCDdrawbitmap(uint8_t x, uint8_t y,const uint8_t *bitmap, uint8_t w, uint8_
 	updateBoundingBox(x, y, x+w, y+h);
 }
 
-void LCDwrite(uint8_t c)
-{
 
-}
 
-void LCDsetCursor(uint8_t x, uint8_t y)
-{
-	cursor.x = x;
-	cursor.y = y;
-}
-
-// bresenham's algorithm - thx wikpedia
-void LCDdrawline(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t color)
-{
-	uint8_t steep = abs(y1 - y0) > abs(x1 - x0);
-	if (steep)
-	{
-		swap(x0, y0);
-		swap(x1, y1);
-	}
-
-	if (x0 > x1)
-	{
-		swap(x0, x1);
-		swap(y0, y1);
-	}
-
-	// much faster to put the test here, since we've already sorted the points
-	updateBoundingBox(x0, y0, x1, y1);
-
-	uint8_t dx, dy;
-	dx = x1 - x0;
-	dy = abs(y1 - y0);
-
-	int8_t err = dx / 2;
-	int8_t ystep;
-
-	if (y0 < y1)
-	{
-		ystep = 1;
-	} else
-	{
-		ystep = -1;
-	}
-
-	for (; x0<=x1; x0++)
-	{
-		if (steep)
-		{
-			my_setpixel(y0, x0, color);
-		}
-		else
-		{
-			my_setpixel(x0, y0, color);
-		}
-		err -= dy;
-		if (err < 0)
-		{
-			y0 += ystep;
-			err += dx;
-		}
-	}
-}
 
 // filled rectangle
 void LCDfillrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,  uint8_t color)
@@ -628,12 +618,5 @@ void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val)
 // roughly calibrated spin delay
 void _delay_ms(uint32_t t)
 {
-	uint32_t nCount = 0;
-	while (t != 0)
-	{
-		nCount = CLKCONST_1;
-		while(nCount != 0)
-			nCount--;
-		t--;
-	}
+  usleep(t * 1000);
 }

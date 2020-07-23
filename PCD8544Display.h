@@ -143,8 +143,6 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 #define LSBFIRST  0
 #define MSBFIRST  1
 
-// reimplemented
-
 // wrapped
  void LCDdata(uint8_t c);
  void LCDspiwrite(uint8_t c);
@@ -154,8 +152,6 @@ static const SDKPoint SDKZeroPoint = {0, 0};
  void LCDdrawcircle(uint8_t x0, uint8_t y0, uint8_t r,uint8_t color);
  void LCDdrawrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color);
  void LCDfillrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color);
- void LCDdrawline(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t color);
- void LCDsetCursor(uint8_t x, uint8_t y);
  void LCDdrawbitmap(uint8_t x, uint8_t y,  const uint8_t *bitmap, uint8_t w, uint8_t h,  uint8_t color);
 
 
