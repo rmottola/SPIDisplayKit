@@ -222,7 +222,13 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 
 - (void) setContrast:(uint8_t)val
 {
-  LCDsetContrast(val);
+  if (val > 0x7f)
+    {
+      val = 0x7f;
+    }
+  LCDcommand(PCD8544_FUNCTIONSET | PCD8544_EXTENDEDINSTRUCTION );
+  LCDcommand( PCD8544_SETVOP | val);
+  LCDcommand(PCD8544_FUNCTIONSET);
 }
 
 // clear everything
@@ -613,15 +619,6 @@ void LCDdata(uint8_t c)
 	LCDspiwrite(c);
 }
 
-void LCDsetContrast(uint8_t val)
-{
-	if (val > 0x7f) {
-		val = 0x7f;
-	}
-	LCDcommand(PCD8544_FUNCTIONSET | PCD8544_EXTENDEDINSTRUCTION );
-	LCDcommand( PCD8544_SETVOP | val);
-	LCDcommand(PCD8544_FUNCTIONSET);
-}
 
 
 // bitbang serial shift out on select GPIO pin. Data rate is defined by CPU clk speed and CLKCONST_2. 
