@@ -70,7 +70,8 @@
 uint8_t pcd8544_buffer[LCDWIDTH * LCDHEIGHT / 8] = {0,};
 
 // LCD port variables
-static uint8_t cursor_x, cursor_y, textsize, textcolor;
+static SDKPoint cursor;
+static uint8_t textsize, textcolor;
 static int8_t _din, _sclk, _dc, _rst, _cs;
 
 #ifdef enablePartialUpdate
@@ -103,7 +104,7 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
       _dc = DC;
       _rst = RST;
       _cs = CE;
-      cursor_x = cursor_y = 0;
+      cursor = SDKZeroPoint;
       textsize = 1;
       textcolor = BLACK;
 
@@ -235,7 +236,7 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
   for ( i = 0; i < LCDWIDTH*LCDHEIGHT/8 ; i++)
     pcd8544_buffer[i] = 0;
   updateBoundingBox(0, 0, LCDWIDTH-1, LCDHEIGHT-1);
-  cursor_y = cursor_x = 0;
+  cursor = SDKZeroPoint;
 }
 
 - (void) showLogo
@@ -312,8 +313,8 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 {
   if (c == '\n')
     {
-      cursor_y += textsize*8;
-      cursor_x = 0;
+      cursor.y += textsize*8;
+      cursor.x = 0;
     }
   else if (c == '\r')
     {
@@ -321,22 +322,21 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
     }
   else
     {
-      [self drawChar:c atPoint:SDKMakePoint(cursor_x, cursor_y)];
-      cursor_x += textsize*6;
-      if (cursor_x >= (LCDWIDTH-5))
+      [self drawChar:c atPoint:cursor];
+      cursor.x += textsize*6;
+      if (cursor.x >= (LCDWIDTH-5))
 	{
-	  cursor_x = 0;
-	  cursor_y+=8;
+	  cursor.x = 0;
+	  cursor.y+=8;
 	}
-      if (cursor_y >= LCDHEIGHT)
-	cursor_y = 0;
+      if (cursor.y >= LCDHEIGHT)
+	cursor.y = 0;
     }
 }
 
 - (void)drawCString:(char*)c atPoint:(SDKPoint)p
 {
-  cursor_x = p.x;
-  cursor_y = p.y;
+  cursor = p;
   while (*c)
     {
       [self writeChar:*c++];
@@ -423,8 +423,8 @@ void LCDwrite(uint8_t c)
 
 void LCDsetCursor(uint8_t x, uint8_t y)
 {
-	cursor_x = x;
-	cursor_y = y;
+	cursor.x = x;
+	cursor.y = y;
 }
 
 // bresenham's algorithm - thx wikpedia
