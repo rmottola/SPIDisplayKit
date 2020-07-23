@@ -123,22 +123,22 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
       digitalWrite(_rst, HIGH);
 
       // get into the EXTENDED mode!
-      LCDcommand(PCD8544_FUNCTIONSET | PCD8544_EXTENDEDINSTRUCTION );
+      [self command:PCD8544_FUNCTIONSET | PCD8544_EXTENDEDINSTRUCTION];
 
       // LCD bias select (4 is optimal?)
-      LCDcommand(PCD8544_SETBIAS | 0x4);
+      [self command:PCD8544_SETBIAS | 0x4];
 
       // set VOP
       if (contrast > 0x7f)
 	contrast = 0x7f;
 
-      LCDcommand( PCD8544_SETVOP | contrast); // Experimentally determined
+      [self command: PCD8544_SETVOP | contrast]; // Experimentally determined
 
       // normal mode
-      LCDcommand(PCD8544_FUNCTIONSET);
+      [self command:PCD8544_FUNCTIONSET];
 
       // Set display to Normal
-      LCDcommand(PCD8544_DISPLAYCONTROL | PCD8544_DISPLAYNORMAL);
+      [self command:PCD8544_DISPLAYCONTROL | PCD8544_DISPLAYNORMAL];
 
       // set up a bounding box for screen updates
       updateBoundingBox(0, 0, LCDWIDTH-1, LCDHEIGHT-1);    
@@ -148,7 +148,8 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 
 - (void) command:(uint8_t) c;
 {
-  LCDcommand(c);
+  digitalWrite( _dc, LOW);
+  LCDspiwrite(c);
 }
 
 - (void) data:(uint8_t) c
@@ -189,7 +190,7 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
 	}
 #endif
 
-      LCDcommand(PCD8544_SETYADDR | p);
+      [self command: PCD8544_SETYADDR | p];
 
 
 #ifdef enablePartialUpdate
@@ -201,7 +202,7 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
       maxcol = LCDWIDTH-1;
 #endif
 
-      LCDcommand(PCD8544_SETXADDR | col);
+      [self command:PCD8544_SETXADDR | col];
 
       for(; col <= maxcol; col++) {
 	//uart_putw_dec(col);
@@ -210,7 +211,7 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
       }
     }
 
-  LCDcommand(PCD8544_SETYADDR );  // no idea why this is necessary but it is to finish the last byte?
+  [self command: PCD8544_SETYADDR];  // no idea why this is necessary but it is to finish the last byte?
 #ifdef enablePartialUpdate
   xUpdateMin = LCDWIDTH - 1;
   xUpdateMax = 0;
@@ -226,9 +227,9 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
     {
       val = 0x7f;
     }
-  LCDcommand(PCD8544_FUNCTIONSET | PCD8544_EXTENDEDINSTRUCTION );
-  LCDcommand( PCD8544_SETVOP | val);
-  LCDcommand(PCD8544_FUNCTIONSET);
+  [self command: PCD8544_FUNCTIONSET | PCD8544_EXTENDEDINSTRUCTION];
+  [self command: PCD8544_SETVOP | val];
+  [self command: PCD8544_FUNCTIONSET];
 }
 
 // clear everything
@@ -605,12 +606,6 @@ void LCDfillcircle(uint8_t x0, uint8_t y0, uint8_t r, uint8_t color)
 void LCDspiwrite(uint8_t c)
 {
 	shiftOut(_din, _sclk, MSBFIRST, c);
-}
-
-void LCDcommand(uint8_t c)
-{
-	digitalWrite( _dc, LOW);
-	LCDspiwrite(c);
 }
 
 void LCDdata(uint8_t c)
