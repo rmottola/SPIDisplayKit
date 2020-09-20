@@ -346,14 +346,90 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
     }
 }
 
-- (void) fillCircleWithCenter:(SDKPoint)center radius:(uint8_t)r color:(uint8_t)c
+- (void) fillCircleWithCenter:(SDKPoint)center radius:(uint8_t)r color:(uint8_t)color
 {
-  LCDfillcircle(center.x, center.y, r, c);
+  uint8_t x0 = center.x;
+  uint8_t y0 = center.y;
+  
+  updateBoundingBox(x0-r, y0-r, x0+r, y0+r);
+  int8_t f = 1 - r;
+  int8_t ddF_x = 1;
+  int8_t ddF_y = -2 * r;
+  int8_t x = 0;
+  int8_t y = r;
+  uint8_t i;
+
+  for (i=y0-r; i<=y0+r; i++)
+    {
+      my_setpixel(x0, i, color);
+    }
+
+  while (x<y)
+    {
+      if (f >= 0)
+	{
+	  y--;
+	  ddF_y += 2;
+	  f += ddF_y;
+	}
+      x++;
+      ddF_x += 2;
+      f += ddF_x;
+
+      for ( i=y0-y; i<=y0+y; i++)
+	{
+	  my_setpixel(x0+x, i, color);
+	  my_setpixel(x0-x, i, color);
+	}
+      for ( i=y0-x; i<=y0+x; i++)
+	{
+	  my_setpixel(x0+y, i, color);
+	  my_setpixel(x0-y, i, color);
+	}
+    }
 }
 
-- (void) strokeCircleWithCenter:(SDKPoint)center radius:(uint8_t)r color:(uint8_t)c
+- (void) strokeCircleWithCenter:(SDKPoint)center radius:(uint8_t)r color:(uint8_t)color
 {
-  LCDdrawcircle(center.x, center.y, r, c);
+  uint8_t x0 = center.x;
+  uint8_t y0 = center.y;
+  
+  updateBoundingBox(x0-r, y0-r, x0+r, y0+r);
+
+  int8_t f = 1 - r;
+  int8_t ddF_x = 1;
+  int8_t ddF_y = -2 * r;
+  int8_t x = 0;
+  int8_t y = r;
+
+  my_setpixel(x0, y0+r, color);
+  my_setpixel(x0, y0-r, color);
+  my_setpixel(x0+r, y0, color);
+  my_setpixel(x0-r, y0, color);
+
+  while (x<y)
+    {
+      if (f >= 0)
+	{
+	  y--;
+	  ddF_y += 2;
+	  f += ddF_y;
+	}
+      x++;
+      ddF_x += 2;
+      f += ddF_x;
+
+      my_setpixel(x0 + x, y0 + y, color);
+      my_setpixel(x0 - x, y0 + y, color);
+      my_setpixel(x0 + x, y0 - y, color);
+      my_setpixel(x0 - x, y0 - y, color);
+
+      my_setpixel(x0 + y, y0 + x, color);
+      my_setpixel(x0 - y, y0 + x, color);
+      my_setpixel(x0 + y, y0 - x, color);
+      my_setpixel(x0 - y, y0 - x, color);
+
+    }
 }
 
 - (void) fillRect:(SDKRect)rect color:(uint8_t)c
@@ -502,86 +578,6 @@ void LCDdrawrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t color)
 	updateBoundingBox(x, y, x+w, y+h);
 }
 
-// draw a circle outline
-void LCDdrawcircle(uint8_t x0, uint8_t y0, uint8_t r, uint8_t color)
-{
-	updateBoundingBox(x0-r, y0-r, x0+r, y0+r);
-
-	int8_t f = 1 - r;
-	int8_t ddF_x = 1;
-	int8_t ddF_y = -2 * r;
-	int8_t x = 0;
-	int8_t y = r;
-
-	my_setpixel(x0, y0+r, color);
-	my_setpixel(x0, y0-r, color);
-	my_setpixel(x0+r, y0, color);
-	my_setpixel(x0-r, y0, color);
-
-	while (x<y)
-	{
-		if (f >= 0)
-		{
-			y--;
-			ddF_y += 2;
-			f += ddF_y;
-		}
-		x++;
-		ddF_x += 2;
-		f += ddF_x;
-
-		my_setpixel(x0 + x, y0 + y, color);
-		my_setpixel(x0 - x, y0 + y, color);
-		my_setpixel(x0 + x, y0 - y, color);
-		my_setpixel(x0 - x, y0 - y, color);
-
-		my_setpixel(x0 + y, y0 + x, color);
-		my_setpixel(x0 - y, y0 + x, color);
-		my_setpixel(x0 + y, y0 - x, color);
-		my_setpixel(x0 - y, y0 - x, color);
-
-	}
-}
-
-void LCDfillcircle(uint8_t x0, uint8_t y0, uint8_t r, uint8_t color)
-{
-	updateBoundingBox(x0-r, y0-r, x0+r, y0+r);
-	int8_t f = 1 - r;
-	int8_t ddF_x = 1;
-	int8_t ddF_y = -2 * r;
-	int8_t x = 0;
-	int8_t y = r;
-	uint8_t i;
-
-	for (i=y0-r; i<=y0+r; i++)
-	{
-		my_setpixel(x0, i, color);
-	}
-
-	while (x<y)
-	{
-		if (f >= 0)
-		{
-			y--;
-			ddF_y += 2;
-			f += ddF_y;
-		}
-		x++;
-		ddF_x += 2;
-		f += ddF_x;
-
-		for ( i=y0-y; i<=y0+y; i++)
-		{
-			my_setpixel(x0+x, i, color);
-			my_setpixel(x0-x, i, color);
-		}
-		for ( i=y0-x; i<=y0+x; i++)
-		{
-			my_setpixel(x0+y, i, color);
-			my_setpixel(x0-y, i, color);
-		}
-	}
-}
 
 void LCDspiwrite(uint8_t c)
 {
