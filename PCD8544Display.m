@@ -525,9 +525,25 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
     }
 }
 
-- (void) drawBitmap:(uint8_t*)bmp inRect:(SDKRect)rect color:(uint8_t)color
+- (void) drawBitmap:(uint8_t*)bitmap inRect:(SDKRect)rect color:(uint8_t)color
 {
-  LCDdrawbitmap(rect.origin.x, rect.origin.y, bmp, rect.size.height, rect.size.width, color);
+  uint8_t x = rect.origin.x;
+  uint8_t y = rect.origin.y;
+  uint8_t w = rect.size.width;
+  uint8_t h = rect.size.height;
+
+  uint8_t j,i;
+  for ( j=0; j<h; j++)
+    {
+      for ( i=0; i<w; i++ )
+	{
+	  if (*(bitmap + i + (j/8)*w) & _BV(j%8))
+	    {
+	      my_setpixel(x+i, y+j, color);
+	    }
+	}
+    }
+  updateBoundingBox(x, y, x+w, y+h);
 }
 
 @end
@@ -559,18 +575,7 @@ static void my_setpixel(uint8_t x, uint8_t y, uint8_t color)
 
 void LCDdrawbitmap(uint8_t x, uint8_t y,const uint8_t *bitmap, uint8_t w, uint8_t h,uint8_t color)
 {
-	uint8_t j,i;
-	for ( j=0; j<h; j++)
-	{
-		for ( i=0; i<w; i++ )
-		{
-			if (*(bitmap + i + (j/8)*w) & _BV(j%8))
-			{
-				my_setpixel(x+i, y+j, color);
-			}
-		}
-	}
-	updateBoundingBox(x, y, x+w, y+h);
+
 }
 
 
