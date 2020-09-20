@@ -432,14 +432,44 @@ static void updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t 
     }
 }
 
-- (void) fillRect:(SDKRect)rect color:(uint8_t)c
+- (void) fillRect:(SDKRect)rect color:(uint8_t)color
 {
-  LCDfillrect(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height, c);
+  uint8_t x = rect.origin.x;
+  uint8_t y = rect.origin.y;
+  uint8_t w = rect.size.width;
+  uint8_t h = rect.size.height;
+
+  // stupidest version - just pixels - but fast with internal buffer!
+  uint8_t i,j;
+  for ( i=x; i<x+w; i++)
+    {
+      for ( j=y; j<y+h; j++)
+	{
+	  my_setpixel(i, j, color);
+	}
+    }
+  updateBoundingBox(x, y, x+w, y+h);
 }
 
-- (void) strokeRect:(SDKRect)rect color:(uint8_t)c
+- (void) strokeRect:(SDKRect)rect color:(uint8_t)color
 {
-  LCDfillrect(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height, c);
+  uint8_t x = rect.origin.x;
+  uint8_t y = rect.origin.y;
+  uint8_t w = rect.size.width;
+  uint8_t h = rect.size.height;
+
+  // stupidest version - just pixels - but fast with internal buffer!
+  uint8_t i;
+  for ( i=x; i<x+w; i++) {
+    my_setpixel(i, y, color);
+    my_setpixel(i, y+h-1, color);
+  }
+  for ( i=y; i<y+h; i++) {
+    my_setpixel(x, i, color);
+    my_setpixel(x+w-1, i, color);
+  }
+
+  updateBoundingBox(x, y, x+w, y+h);
 }
 
 // bresenham's algorithm - thx wikpedia
@@ -540,41 +570,6 @@ void LCDdrawbitmap(uint8_t x, uint8_t y,const uint8_t *bitmap, uint8_t w, uint8_
 			}
 		}
 	}
-	updateBoundingBox(x, y, x+w, y+h);
-}
-
-
-
-
-// filled rectangle
-void LCDfillrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,  uint8_t color)
-{
-	// stupidest version - just pixels - but fast with internal buffer!
-	uint8_t i,j;
-	for ( i=x; i<x+w; i++)
-	{
-		for ( j=y; j<y+h; j++)
-		{
-			my_setpixel(i, j, color);
-		}
-	}
-	updateBoundingBox(x, y, x+w, y+h);
-}
-
-// draw a rectangle
-void LCDdrawrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t color)
-{
-	// stupidest version - just pixels - but fast with internal buffer!
-	uint8_t i;
-	for ( i=x; i<x+w; i++) {
-		my_setpixel(i, y, color);
-		my_setpixel(i, y+h-1, color);
-	}
-	for ( i=y; i<y+h; i++) {
-		my_setpixel(x, i, color);
-		my_setpixel(x+w-1, i, color);
-	}
-
 	updateBoundingBox(x, y, x+w, y+h);
 }
 

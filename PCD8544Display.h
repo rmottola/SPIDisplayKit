@@ -93,8 +93,8 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 - (void) fillCircleWithCenter:(SDKPoint)center radius:(uint8_t)r color:(uint8_t)color;
 - (void) strokeCircleWithCenter:(SDKPoint)center radius:(uint8_t)r color:(uint8_t)color;
 
-- (void) fillRect:(SDKRect)rect color:(uint8_t)c;
-- (void) strokeRect:(SDKRect)rect color:(uint8_t)c;
+- (void) fillRect:(SDKRect)rect color:(uint8_t)color;
+- (void) strokeRect:(SDKRect)rect color:(uint8_t)color;
 
 - (void) strokeLineFromPoint:(SDKPoint)p1 toPoint:(SDKPoint)p2 color:(uint8_t)c;
 
@@ -148,8 +148,6 @@ static const SDKPoint SDKZeroPoint = {0, 0};
  void LCDspiwrite(uint8_t c);
  void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
 
- void LCDdrawrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color);
- void LCDfillrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t color);
  void LCDdrawbitmap(uint8_t x, uint8_t y,  const uint8_t *bitmap, uint8_t w, uint8_t h,  uint8_t color);
 
 
