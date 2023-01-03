@@ -56,12 +56,13 @@
 
 #include <unistd.h>
 
-#import "PCD8544Display.h"
-
 #include <wiringPi.h>
 
 #include "pilogo.h"
 #include "font.h"
+
+#import "SPIDisplayKit/PCD8544Display.h"
+
 
 // An abs() :)
 #define abs(a) (((a) < 0) ? -(a) : (a))
