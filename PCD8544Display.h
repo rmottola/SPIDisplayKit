@@ -4,7 +4,7 @@
    Copyright (C) 2010 Limor Fried, Adafruit Industries
    Copyright (C) 2011 Le Dang Dung  <LeeDangDung@gmail.com> (tested on LPC1769)
    Copyright (C) 2012 Andre Wussow <desk@binerry.de>
-   Copyright (C) 2020 Riccardo Mottola
+   Copyright (C) 2020-2023 Riccardo Mottola
 
    Author: Riccardo Mottola
            Andre Wussow
@@ -102,9 +102,6 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 
 @end
 
-#endif // _PCD8544DISPLAY_H_
-
-
 #include <stdint.h>
 
 #define BLACK 1
@@ -151,3 +148,5 @@ static const SDKPoint SDKZeroPoint = {0, 0};
 
 void delayMillis(uint32_t t);
 static void my_setpixel(uint8_t x, uint8_t y, uint8_t color);
+
+#endif // _PCD8544DISPLAY_H_
