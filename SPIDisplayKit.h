@@ -27,7 +27,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <SPIDisplayKit/PCD8544.h>
+#import <SPIDisplayKit/PCD8544Display.h>
 
 @end
 
