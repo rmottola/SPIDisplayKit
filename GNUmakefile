@@ -41,13 +41,15 @@ SPIDisplayKit_HEADER_FILES = \
 SPIDisplayKit.h \
 PCD8544Display.h \
 font.h \
-pilogo.h 
+pilogo.h \
+SPITextView.h 
 
 #
 # Objective-C Class files
 #
 SPIDisplayKit_OBJC_FILES = \
-PCD8544Display.m
+PCD8544Display.m \
+SPITextView.m
 #
 # AutoGSDoc
 #

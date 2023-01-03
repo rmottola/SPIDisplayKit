@@ -8,7 +8,8 @@
 	dist
     );
     "CLASS_FILES" = (
-	"PCD8544Display.m"
+	"PCD8544Display.m",
+	"SPITextView.m"
     );
     COMPILEROPTIONS = "";
     CPPOPTIONS = "";
@@ -22,7 +23,8 @@
 	"SPIDisplayKit.h",
 	"PCD8544Display.h",
 	"font.h",
-	"pilogo.h"
+	"pilogo.h",
+	"SPITextView.h"
     );
     IMAGES = (
     );
@@ -59,7 +61,8 @@
 	"SPIDisplayKit.h",
 	"PCD8544Display.h",
 	"font.h",
-	"pilogo.h"
+	"pilogo.h",
+	"SPITextView.h"
     );
     "SEARCH_HEADER_DIRS" = (
     );
