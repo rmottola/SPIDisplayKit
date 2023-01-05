@@ -28,8 +28,8 @@
 #import <Foundation/Foundation.h>
 
 #import <SPIDisplayKit/PCD8544Display.h>
+#import <SPIDisplayKit/SPITextView.h>
 
-@end
 
 #endif // _SPIDISPLAYKIT_H_
 
