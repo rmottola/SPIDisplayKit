@@ -32,6 +32,9 @@
   if ((self = [super init]))
     {
       textLines = [[NSMutableArray alloc] initWithCapacity:4];
+      maxWidth = 15;
+      maxHeight = 6;
+      lcd = disp;
     }
   return self;
 }
@@ -51,6 +54,40 @@
 
 - (void)draw
 {
+  NSUInteger lastLine;
+  NSUInteger i;
+  NSMutableArray *linesToDraw;
+  NSUInteger offset;
+
+  // extract a subarray of strings to draw
+  // if there is no scrollback, it is just the first lines
+  // otherwise it is from the end the maximum display height
+  linesToDraw = [[NSMutableArray alloc] initWithCapacity:maxHeight];
+  offset = 0;
+  if ([textLines count] > maxHeight)
+    offset = [textLines count]-maxHeight;
+  for (i = offset; i < [textLines count]; i++)
+    [linesToDraw addObject:[textLines objectAtIndex:i]];
+
+  [lcd clear];
+  for (i = 0; i < [linesToDraw count]; i++)
+    {
+      NSString *lineStr;
+      NSString *displayStr;
+      char *cStr;
+
+      lineStr = [linesToDraw objectAtIndex:i];
+      displayStr = lineStr;
+      if ([displayStr length] > maxWidth)
+	{
+	  displayStr = [lineStr substringWithRange:NSMakeRange(0,maxWidth)];
+	}
+      NSLog(@"draw |%@| of |%@|", displayStr, lineStr);
+      cStr = [displayStr cString];
+      [lcd drawCString: cStr atPoint:SDKMakePoint(0,i*8)];
+      [lcd display];
+    }
+  [linesToDraw release];
 }
 
 @end

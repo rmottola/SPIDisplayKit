@@ -35,11 +35,13 @@
   NSMutableArray *textLines;
   NSInteger scrollbackLines;
   NSUInteger maxWidth;
-  NSUInteger maxHeigth;
+  NSUInteger maxHeight;
 }
 
+- (id)initWithDisplay:(PCD8544Display *)disp;
 - (void)setLine:(NSUInteger)line toString:(NSString *)aStr;
 - (void)appendLine:(NSString *)aStr;
+- (void)draw;
 
 @end
 
