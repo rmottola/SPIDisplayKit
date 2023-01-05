@@ -1,11 +1,11 @@
 /*
    Project: SPIDisplayKit
 
-   Copyright (C) 2020 Free Software Foundation
+   Copyright (C) 2020-2023 Riccardo Mottola
 
-   Author: ,,,
+   Author: Riccardo Mottola
 
-   Created: 2020-07-17 09:12:19 +0000 by pi
+   Created: 2020-07-17 09:12:19
 
    This application is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
