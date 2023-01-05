@@ -27,12 +27,13 @@
 
 @implementation SPITextView
 
-- (void)initWithDisplay:(PCD8544Display *)disp
+- (id)initWithDisplay:(PCD8544Display *)disp
 {
   if ((self = [super init]))
     {
       textLines = [[NSMutableArray alloc] initWithCapacity:4];
     }
+  return self;
 }
 
 - (void)setLine:(NSUInteger)line toString:(NSString *)aStr
