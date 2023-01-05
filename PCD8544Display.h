@@ -54,7 +54,7 @@ typedef struct _SDKRect
 } SDKRect;
 
 /** Returns an SDKPoint having x-coordinate X and y-coordinate Y. */
-SDKPoint
+static inline SDKPoint
 SDKMakePoint(uint8_t x, uint8_t y)
 {
   SDKPoint point;
